@@ -19,22 +19,19 @@ console.log(markup);
 Now running:
 
 ```bash
-deno run --allow-read md2html.ts README.md > readme.html
+deno run --allow-read md2html.ts example.md > example.html
 ```
 
 Will output:
 
 ```html
-<h1 id="markdown">markdown</h1>
-<p>
-  Deno Markdown module forked from
-  <a
-    href="https://github.com/ts-stack/markdown/tree/bb47aa8e625e89e6aa84f49a98536a3089dee831"
-    >https://github.com/ts-stack/markdown/tree/bb47aa8e625e89e6aa84f49a98536a3089dee831</a
-  >
-</p>
-<h3 id="example-usage">Example usage</h3>
-<p>Simple md2html.ts script:</p>
+<h1 id="hello-world">Hello World</h1>
+<h2 id="this-an-example-for-md2html-ts-">
+  This an example for <code>md2html.ts</code>
+</h2>
+<p>A small paragraph that will become a <code>&lt;p&gt;</code> tag</p>
+<hr />
+<p>Code Block (md2html.ts)</p>
 
 <pre><code class="lang-typescript">import { Marked } from &quot;./mod.ts&quot;;
 
@@ -45,13 +42,13 @@ const markup = Marked.parse(markdown);
 console.log(markup);
 </code></pre>
 <p>
-  Now running:
-  <code>deno run --allow-read md2html.ts README.md &gt; readme.html</code>
-  Will output:
+  This module is forked from
+  <a
+    href="https://github.com/ts-stack/markdown/tree/bb47aa8e625e89e6aa84f49a98536a3089dee831"
+    >ts-stack/markdown</a
+  >
 </p>
-
-<pre><code class="lang-html">
-</code></pre>
+<p>Made for Deno <img src="https://deno.land/logo.svg" alt="deno-logo" /></p>
 ```
 
 ---
