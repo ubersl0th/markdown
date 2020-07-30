@@ -36,11 +36,12 @@ Will output:
 
 <pre><code class="lang-typescript">import { Marked } from &quot;./mod.ts&quot;;
 
-const decoder = new TextDecoder(&quot;utf-8&quot;);
+const decoder = new TextDecoder("utf-8");
 const filename = Deno.args[0];
 const markdown = decoder.decode(await Deno.readFile(filename));
 const markup = Marked.parse(markdown);
-console.log(markup);
+console.log(markup.content);
+console.log(JSON.stringify(markup.meta))
 </code></pre>
 <p>
   This module is forked from
