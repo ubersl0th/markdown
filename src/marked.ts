@@ -17,12 +17,17 @@ import {
   SimpleRenderer,
   Token,
   TokenType,
+  Parsed
 } from "./interfaces.ts";
 import { Parser } from "./parser.ts";
 
 export class Marked {
   static options = new MarkedOptions();
   protected static simpleRenderers: SimpleRenderer[] = [];
+  protected static parsed: Parsed = {
+    content: "",
+    meta: {},
+  };
 
   /**
    * Merges the default options with options that will be set.
@@ -45,18 +50,21 @@ export class Marked {
   }
 
   /**
-   * Accepts Markdown text and returns text in HTML format.
+   * Accepts Markdown text and returns an object containing HTML and metadata.
    *
    * @param src String of markdown source to be compiled.
    * @param options Hash of options. They replace, but do not merge with the default options.
    * If you want the merging, you can to do this via `Marked.setOptions()`.
    */
-  static parse(src: string, options: MarkedOptions = this.options): string {
+  static parse(src: string, options: MarkedOptions = this.options): Parsed {
     try {
-      const { tokens, links } = this.callBlockLexer(src, options);
-      return this.callParser(tokens, links, options);
+      const { tokens, links, meta } = this.callBlockLexer(src, options);
+      this.parsed.content = this.callParser(tokens, links, options);
+      this.parsed.meta = meta;
+      return this.parsed;
     } catch (e) {
-      return this.callMe(e);
+      this.parsed.content = this.callMe(e);
+      return this.parsed;
     }
   }
 
@@ -72,7 +80,7 @@ export class Marked {
     src: string,
     options: MarkedOptions = this.options,
   ): DebugReturns {
-    const { tokens, links } = this.callBlockLexer(src, options);
+    const { tokens, links, meta } = this.callBlockLexer(src, options);
     let origin = tokens.slice();
     const parser = new Parser(options);
     parser.simpleRenderers = this.simpleRenderers;
@@ -94,7 +102,7 @@ export class Marked {
       }
     });
 
-    return { tokens: origin, links, result };
+    return { tokens: origin, links, meta, result};
   }
 
   protected static callBlockLexer(

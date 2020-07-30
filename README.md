@@ -13,7 +13,8 @@ const decoder = new TextDecoder("utf-8");
 const filename = Deno.args[0];
 const markdown = decoder.decode(await Deno.readFile(filename));
 const markup = Marked.parse(markdown);
-console.log(markup);
+console.log(markup.content);
+console.log(JSON.stringify(markup.meta))
 ```
 
 Now running:
@@ -49,6 +50,8 @@ console.log(markup);
   >
 </p>
 <p>Made for Deno <img src="https://deno.land/logo.svg" alt="deno-logo" /></p>
+
+{"title":"Hello world!","subtitle":"Front-matter is supported!","boolean":true,"list-example":["this","is",{"a":"list"}]}
 ```
 
 ---
