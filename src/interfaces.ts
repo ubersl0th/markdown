@@ -171,6 +171,12 @@ export class MarkedOptions {
 export interface LexerReturns {
   tokens: Token[];
   links: Links;
+  meta: Obj;
+}
+
+export interface Parsed {
+  content: string;
+  meta: Obj;
 }
 
 export interface DebugReturns extends LexerReturns {

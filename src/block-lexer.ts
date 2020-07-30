@@ -19,8 +19,10 @@ import {
   RulesBlockTables,
   Token,
   TokenType,
+  Obj
 } from "./interfaces.ts";
 import { Marked } from "./marked.ts";
+import { load } from "https://deno.land/std/encoding/_yaml/loader/loader.ts";
 
 export class BlockLexer<T extends typeof BlockLexer> {
   static simpleRules: RegExp[] = [];
@@ -37,6 +39,7 @@ export class BlockLexer<T extends typeof BlockLexer> {
   protected options: MarkedOptions;
   protected links: Links = {};
   protected tokens: Token[] = [];
+  protected frontmatter: Obj = {};
   protected hasRulesGfm!: boolean;
   protected hasRulesTables!: boolean;
 
@@ -183,7 +186,7 @@ export class BlockLexer<T extends typeof BlockLexer> {
     isBlockQuote?: boolean,
   ): LexerReturns {
     let nextPart = src;
-    let execArr: RegExpExecArray | null;
+    let execArr, fmArr: RegExpExecArray | null;
 
     mainLoop:
     while (nextPart) {
@@ -290,9 +293,22 @@ export class BlockLexer<T extends typeof BlockLexer> {
 
       // hr
       if ((execArr = this.rules.hr.exec(nextPart))) {
-        nextPart = nextPart.substring(execArr[0].length);
-        this.tokens.push({ type: TokenType.hr });
-        continue;
+
+        // Checks if the previous string contains a content.
+        if ((this.tokens.length == 0) || (this.tokens.every(object => object.type == TokenType.space))) {
+
+          // Grabs front-matter data and parse it into Javascript object.
+          if (fmArr = /^(?:\-\-\-)(.*?)(?:\-\-\-|\.\.\.)/s.exec(nextPart)) {
+            nextPart = nextPart.substring(fmArr[0].length);
+            this.frontmatter = <Obj> load(fmArr[1]);
+          }
+          continue;
+
+        } else {
+          nextPart = nextPart.substring(execArr[0].length);
+          this.tokens.push({ type: TokenType.hr });
+          continue;
+        }
       }
 
       // blockquote
@@ -499,6 +515,6 @@ export class BlockLexer<T extends typeof BlockLexer> {
       }
     }
 
-    return { tokens: this.tokens, links: this.links };
+    return { tokens: this.tokens, links: this.links, meta: this.frontmatter };
   }
 }
