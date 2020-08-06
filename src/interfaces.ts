@@ -123,7 +123,7 @@ export class MarkedOptions {
   pedantic?: boolean = false;
   sanitize?: boolean = false;
   sanitizer?: (text: string) => string;
-  mangle?: boolean = true;
+  mangle?: boolean = false;
   smartLists?: boolean = false;
   silent?: boolean = false;
   /**
