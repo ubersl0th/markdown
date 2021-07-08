@@ -58,13 +58,14 @@ export class Marked {
    */
   static parse(src: string, options: MarkedOptions = this.options): Parsed {
     try {
+      const result = {content: "", meta: {}};
       const { tokens, links, meta } = this.callBlockLexer(src, options);
-      this.parsed.content = this.callParser(tokens, links, options);
-      this.parsed.meta = meta;
-      return this.parsed;
+      result.content = this.callParser(tokens, links, options);
+      result.meta = meta;
+      return result;
     } catch (e) {
-      this.parsed.content = this.callMe(e);
-      return this.parsed;
+      result.content = this.callMe(e);
+      return result;
     }
   }
 
