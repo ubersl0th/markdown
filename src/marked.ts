@@ -24,10 +24,6 @@ import { Parser } from "./parser.ts";
 export class Marked {
   static options = new MarkedOptions();
   protected static simpleRenderers: SimpleRenderer[] = [];
-  protected static parsed: Parsed = {
-    content: "",
-    meta: {},
-  };
 
   /**
    * Merges the default options with options that will be set.
@@ -57,8 +53,8 @@ export class Marked {
    * If you want the merging, you can to do this via `Marked.setOptions()`.
    */
   static parse(src: string, options: MarkedOptions = this.options): Parsed {
+    const result = new Parsed();
     try {
-      const result = {content: "", meta: {}};
       const { tokens, links, meta } = this.callBlockLexer(src, options);
       result.content = this.callParser(tokens, links, options);
       result.meta = meta;
