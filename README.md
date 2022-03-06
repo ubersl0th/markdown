@@ -60,3 +60,16 @@ console.log(JSON.stringify(markup.meta))
 ### Notes
 
 I had to do some changes to the source code to make the compiler happy, mostly fixes for things that were uninitialized and possibly null or undefined
+
+---
+
+### Testing
+Run
+```bash
+deno test --allow-read
+```
+or 
+```bash
+./runtests.sh
+```
+To add more tests, add a markdown file with the corresponding expected output html file of the same name in the ./test/tests folder.
