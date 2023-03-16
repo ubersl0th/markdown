@@ -22,7 +22,7 @@ import {
   Obj
 } from "./interfaces.ts";
 import { Marked } from "./marked.ts";
-import { load } from "https://deno.land/std/encoding/_yaml/loader/loader.ts";
+import { load } from "https://deno.land/std/yaml/_loader/loader.ts";
 
 export class BlockLexer<T extends typeof BlockLexer> {
   static simpleRules: RegExp[] = [];
